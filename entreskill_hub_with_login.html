@@ -1,0 +1,758 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pri:#2563EB;--sec:#10B981;--acc:#F59E0B;
+  --bg:#F8FAFC;--text:#0F172A;--muted:#64748B;
+  --card:#fff;--border:#E2E8F0;--rad:16px;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.hidden{display:none!important}
+.page{animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ── LOGIN PAGE ── */
+#page-login{
+  min-height:600px;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 20% 30%,#EFF6FF,#F0FDF4 60%,#FFFBEB);
+  padding:2rem;position:relative;overflow:hidden;
+}
+.login-blob{position:absolute;border-radius:50%;pointer-events:none}
+.lb1{width:320px;height:320px;top:-80px;left:-80px;background:radial-gradient(circle,rgba(37,99,235,.07),transparent 70%)}
+.lb2{width:400px;height:400px;bottom:-120px;right:-100px;background:radial-gradient(circle,rgba(16,185,129,.06),transparent 70%)}
+.lb3{width:200px;height:200px;top:40%;left:60%;background:radial-gradient(circle,rgba(245,158,11,.05),transparent 70%)}
+
+.login-card{
+  background:rgba(255,255,255,.98);border-radius:28px;padding:2.75rem 2.25rem 2.5rem;
+  width:100%;max-width:420px;text-align:center;position:relative;z-index:2;
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 20px 40px -12px rgba(0,0,0,.12),0 4px 10px rgba(0,0,0,.03);
+  animation:cardIn .5s cubic-bezier(.22,.68,0,1.2);
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+
+.login-brand{font-size:2.2rem;font-weight:800;letter-spacing:-.03em;margin-bottom:.35rem}
+.login-brand span{color:var(--sec)}
+.login-tagline{font-size:.85rem;color:var(--muted);margin-bottom:.25rem;line-height:1.5}
+.login-divider{height:1px;background:var(--border);margin:1.5rem 0}
+
+.login-field{text-align:left;margin-bottom:.85rem}
+.login-field label{font-size:.75rem;font-weight:600;color:var(--muted);display:block;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.06em}
+.login-input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.62rem .9rem;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .15s,box-shadow .15s;background:#fff;color:var(--text)}
+.login-input:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+
+.role-select{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.62rem .9rem;font-size:.88rem;font-family:inherit;outline:none;background:#fff;color:var(--text);cursor:pointer;transition:border-color .15s}
+.role-select:focus{border-color:var(--pri)}
+
+.login-btn{width:100%;padding:.78rem;border:none;border-radius:12px;background:var(--pri);color:#fff;font-size:.92rem;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;letter-spacing:-.01em;margin-top:.25rem;display:flex;align-items:center;justify-content:center;gap:.5rem}
+.login-btn:hover{background:#1D4ED8;transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.3)}
+.login-btn:active{transform:scale(.98)}
+.login-btn:disabled{opacity:.65;cursor:not-allowed;transform:none}
+
+.google-btn{width:100%;padding:.72rem;border:1.5px solid var(--border);border-radius:12px;background:#fff;color:var(--text);font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:.75rem}
+.google-btn:hover{border-color:#94A3B8;background:#F8FAFC;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.g-icon{width:18px;height:18px}
+
+.login-switch{font-size:.8rem;color:var(--muted);margin-top:1.1rem}
+.login-switch a{color:var(--pri);font-weight:600;cursor:pointer;text-decoration:none}
+.login-switch a:hover{text-decoration:underline}
+
+.login-footer{display:flex;justify-content:center;gap:.75rem;margin-top:1.5rem}
+.login-footer span{font-size:.68rem;color:#94A3B8;background:rgba(0,0,0,.03);padding:.25rem .7rem;border-radius:99px}
+
+/* AI Welcome bubble */
+.ai-bubble{background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border:1px solid #BFDBFE;border-radius:14px;padding:.85rem 1rem;margin-bottom:1.25rem;text-align:left;animation:fadeIn .4s ease}
+.ai-bubble .ai-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--pri);margin-bottom:.3rem;display:flex;align-items:center;gap:.35rem}
+.ai-bubble .ai-text{font-size:.82rem;color:#1E3A8A;line-height:1.6}
+.ai-loading{display:flex;gap:.3rem;align-items:center;padding:.5rem 0}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--pri);animation:dotPulse 1.2s ease infinite}
+.ai-dot:nth-child(2){animation-delay:.2s}
+.ai-dot:nth-child(3){animation-delay:.4s}
+@keyframes dotPulse{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
+.error-msg{background:#FEF2F2;border:1px solid #FECACA;border-radius:8px;padding:.55rem .85rem;font-size:.8rem;color:#DC2626;margin-bottom:.75rem;text-align:left}
+
+/* ── NAV ── */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 1.5rem;display:flex;align-items:center;gap:.75rem;height:58px}
+.nav-brand{font-weight:800;font-size:17px;color:var(--pri);cursor:pointer}
+.nav-brand span{color:var(--sec)}
+.nav-links{display:flex;gap:.25rem;margin-left:auto;align-items:center}
+.nav-btn{padding:.38rem .8rem;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .15s}
+.nav-btn.ghost{background:transparent;color:var(--muted)}
+.nav-btn.ghost:hover{background:#F1F5F9;color:var(--text)}
+.nav-btn.pri{background:var(--pri);color:#fff}
+.nav-btn.pri:hover{background:#1D4ED8}
+.user-pill{display:flex;align-items:center;gap:.45rem;background:#F0FDF4;border:1px solid #A7F3D0;border-radius:99px;padding:.28rem .7rem .28rem .35rem;font-size:.76rem;font-weight:600;color:#065F46}
+.user-av{width:22px;height:22px;border-radius:50%;background:var(--sec);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#EFF6FF 0%,#F0FDF4 60%,#FFFBEB 100%);padding:4rem 1.5rem 3rem;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.4rem;background:#EEF2FF;color:#4338CA;border:1px solid #C7D2FE;border-radius:99px;padding:.28rem .85rem;font-size:12px;font-weight:600;margin-bottom:1.1rem}
+.hero h1{font-size:clamp(1.7rem,5vw,2.8rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;max-width:640px;margin:0 auto 1rem}
+.hero h1 em{font-style:normal;color:var(--pri)}
+.hero p{font-size:.95rem;color:var(--muted);max-width:500px;margin:0 auto 2rem;line-height:1.7}
+.btn{padding:.62rem 1.3rem;border-radius:10px;font-size:.86rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;display:inline-flex;align-items:center;gap:.4rem}
+.btn-pri{background:var(--pri);color:#fff;box-shadow:0 4px 14px rgba(37,99,235,.22)}
+.btn-pri:hover{background:#1D4ED8;transform:translateY(-1px)}
+.btn-out{background:#fff;color:var(--text);border:1.5px solid var(--border)}
+.btn-out:hover{border-color:#94A3B8}
+.hero-btns{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-bottom:2.25rem}
+.hero-stats{display:flex;gap:2rem;justify-content:center;flex-wrap:wrap}
+.stat-num{font-size:1.5rem;font-weight:800;color:var(--pri)}
+.stat-lbl{font-size:.7rem;color:var(--muted);margin-top:.12rem}
+
+/* ── PLATFORM SECTIONS ── */
+.section{padding:3rem 1.5rem}
+.section-inner{max-width:1060px;margin:0 auto}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sec);margin-bottom:.45rem}
+.sec-title{font-size:1.55rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.35rem}
+.sec-sub{color:var(--muted);font-size:.88rem;max-width:460px;line-height:1.65}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin-top:1.75rem}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1.25rem;transition:all .2s}
+.feat-card:hover{box-shadow:0 6px 22px rgba(0,0,0,.07);transform:translateY(-2px)}
+.feat-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:.85rem}
+.feat-title{font-weight:700;font-size:.9rem;margin-bottom:.3rem}
+.feat-desc{font-size:.78rem;color:var(--muted);line-height:1.6}
+
+.journey-strip{background:#0F172A;color:#fff;padding:3rem 1.5rem;text-align:center}
+.j-steps{display:flex;justify-content:center;flex-wrap:wrap;margin-top:2.25rem}
+.jstep{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 1.1rem;min-width:90px}
+.jstep:not(:last-child)::after{content:'→';position:absolute;right:-6px;top:16px;color:#475569;font-size:.9rem}
+.jstep-num{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;margin-bottom:.55rem}
+.jstep-lbl{font-size:.68rem;color:#94A3B8;font-weight:500}
+
+.ideas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1rem}
+.idea-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1rem;cursor:pointer;transition:all .15s}
+.idea-card:hover{box-shadow:0 6px 22px rgba(0,0,0,.08);transform:translateY(-2px);border-color:#CBD5E1}
+.diff-easy{background:#F0FDF4;color:#059669;font-size:.66rem;font-weight:700;padding:.16rem .46rem;border-radius:6px}
+.diff-medium{background:#FFFBEB;color:#D97706;font-size:.66rem;font-weight:700;padding:.16rem .46rem;border-radius:6px}
+.diff-hard{background:#FEF2F2;color:#DC2626;font-size:.66rem;font-weight:700;padding:.16rem .46rem;border-radius:6px}
+
+.filter-btn{padding:.3rem .75rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.76rem;font-weight:500;cursor:pointer;transition:all .15s}
+.filter-btn.active{border-color:var(--pri);background:#EFF6FF;color:var(--pri)}
+
+.mentor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:.9rem}
+.mentor-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1rem;text-align:center;cursor:pointer;transition:all .15s}
+.mentor-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.m-av{width:50px;height:50px;border-radius:50%;margin:0 auto .6rem;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;color:#fff}
+
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:.9rem}
+.learn-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);overflow:hidden;cursor:pointer;transition:all .15s}
+.learn-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.learn-thumb{height:82px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.learn-body{padding:.8rem}
+.learn-type{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--pri);margin-bottom:.22rem}
+.learn-title{font-weight:700;font-size:.8rem;line-height:1.4;margin-bottom:.2rem}
+.learn-meta{font-size:.68rem;color:var(--muted)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1.25rem}
+.prog-track{background:#F1F5F9;border-radius:99px;height:7px;overflow:hidden}
+.prog-fill{height:100%;border-radius:99px}
+.tag{font-size:.67rem;padding:.16rem .46rem;border-radius:6px;background:#F1F5F9;color:var(--muted)}
+
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;z-index:100}
+.tab-btn{flex:1;padding:.52rem .2rem .42rem;display:flex;flex-direction:column;align-items:center;gap:.14rem;font-size:.58rem;font-weight:500;color:var(--muted);cursor:pointer;transition:color .15s;border:none;background:none}
+.tab-btn.active{color:var(--pri)}
+.tab-icon{font-size:1.15rem}
+.main-content{padding-bottom:66px}
+.onboard{max-width:600px;margin:0 auto;padding:1.75rem 1.5rem}
+.progress-bar{background:#E2E8F0;border-radius:99px;height:5px;margin-bottom:1.65rem;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--pri),var(--sec));border-radius:99px;transition:width .4s ease}
+.skill-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:.55rem;margin-bottom:1.1rem}
+.skill-chip{border:1.5px solid var(--border);border-radius:10px;padding:.55rem .65rem;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:500}
+.skill-chip:hover{border-color:var(--pri);background:#EFF6FF}
+.skill-chip.sel{border-color:var(--pri);background:#EFF6FF;color:var(--pri)}
+.int-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:.55rem;margin-bottom:1.1rem}
+.int-chip{border:1.5px solid var(--border);border-radius:10px;padding:.75rem .4rem;cursor:pointer;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:.3rem;font-size:.73rem;font-weight:500;text-align:center}
+.int-chip:hover{border-color:var(--sec);background:#F0FDF4}
+.int-chip.sel{border-color:var(--sec);background:#F0FDF4;color:#059669}
+.quiz-opt{border:1.5px solid var(--border);border-radius:10px;padding:.58rem .85rem;cursor:pointer;font-size:.8rem;transition:all .15s;display:flex;align-items:center;gap:.5rem;margin-bottom:.38rem}
+.quiz-opt:hover{border-color:var(--acc);background:#FFFBEB}
+.quiz-opt.sel{border-color:var(--acc);background:#FFFBEB;color:#92400E;font-weight:600}
+.full-w{width:100%;justify-content:center;padding:.72rem;font-size:.88rem}
+.input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:.58rem .85rem;font-size:.86rem;font-family:inherit;outline:none;transition:border-color .15s}
+.input:focus{border-color:var(--pri)}
+.reco-card{border:1.5px solid var(--border);border-radius:var(--rad);padding:1rem;display:flex;gap:.85rem;align-items:flex-start;margin-bottom:.65rem}
+.reco-card.top{border-color:var(--pri);background:#F0F5FF}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:#fff;border-radius:20px 20px 0 0;padding:1.65rem;width:100%;max-width:680px;max-height:80vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 1.3rem}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1.1rem}
+.testi-quote{font-size:.8rem;line-height:1.65;color:var(--muted);font-style:italic;margin-bottom:.85rem}
+.rm-step{display:flex;gap:.8rem;padding:.72rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.rm-dot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700}
+</style>
+
+<div id="app">
+
+<!-- ═══════════════════════════════════════════════════════ PAGE 1: LOGIN -->
+<div id="page-login" class="page">
+  <div class="login-blob lb1"></div>
+  <div class="login-blob lb2"></div>
+  <div class="login-blob lb3"></div>
+  <div class="login-card" id="login-card-wrap">
+    <!-- Brand -->
+    <div class="login-brand">🚀 Entre<span>Skill</span> Hub</div>
+    <p class="login-tagline">Transform your skills into a sustainable business</p>
+    <div class="login-divider"></div>
+
+    <!-- AI welcome bubble (shown after login) -->
+    <div id="ai-welcome" class="ai-bubble hidden">
+      <div class="ai-label">✨ AI Welcome Message</div>
+      <div class="ai-text" id="ai-welcome-text">
+        <div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div></div>
+      </div>
+    </div>
+
+    <!-- Error msg -->
+    <div id="login-error" class="error-msg hidden"></div>
+
+    <!-- SIGN IN FORM (default view) -->
+    <div id="signin-form">
+      <div class="login-field">
+        <label>Email Address</label>
+        <input class="login-input" type="email" id="si-email" placeholder="you@example.com">
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input class="login-input" type="password" id="si-pass" placeholder="••••••••">
+      </div>
+      <button class="login-btn" id="signin-btn" onclick="handleSignIn()">
+        <span id="signin-btn-text">Sign In</span>
+      </button>
+      <div style="display:flex;align-items:center;gap:.75rem;margin:1rem 0">
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+        <span style="font-size:.72rem;color:var(--muted)">or</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <button class="google-btn" onclick="handleSignIn()">
+        <svg class="g-icon" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 13 4 24s8.9 20 20 20 20-9 20-20c0-1.3-.1-2.7-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.1 19 12 24 12c3.1 0 5.8 1.2 8 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.7-.4-3.9z"/></svg>
+        Continue with Google
+      </button>
+      <div class="login-switch">Don't have an account? <a onclick="showSignup()">Create one free →</a></div>
+    </div>
+
+    <!-- SIGN UP FORM -->
+    <div id="signup-form" class="hidden">
+      <div class="login-field">
+        <label>Full Name</label>
+        <input class="login-input" type="text" id="su-name" placeholder="Your full name">
+      </div>
+      <div class="login-field">
+        <label>Email Address</label>
+        <input class="login-input" type="email" id="su-email" placeholder="you@example.com">
+      </div>
+      <div class="login-field">
+        <label>Password</label>
+        <input class="login-input" type="password" id="su-pass" placeholder="Create a password">
+      </div>
+      <div class="login-field">
+        <label>I am a...</label>
+        <select class="role-select" id="su-role">
+          <option value="">Select your role</option>
+          <option>Student / Fresh Graduate</option>
+          <option>Skilled Worker</option>
+          <option>Women Entrepreneur</option>
+          <option>Rural Entrepreneur</option>
+          <option>Freelancer</option>
+          <option>Micro Business Owner</option>
+        </select>
+      </div>
+      <button class="login-btn" id="signup-btn" onclick="handleSignUp()">
+        <span id="signup-btn-text">Create Account & Continue</span>
+      </button>
+      <div class="login-switch" style="margin-top:.9rem">Already have an account? <a onclick="showSignin()">Sign in →</a></div>
+    </div>
+
+    <div class="login-footer">
+      <span>✨ Free forever</span>
+      <span>🔒 Privacy first</span>
+      <span>🚀 Launch ready</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ NAV (platform) -->
+<nav class="hidden" id="main-nav">
+  <div class="nav-brand" onclick="goTo('home')">🚀 Entre<span>Skill</span> Hub</div>
+  <div class="nav-links" id="nav-links">
+    <button class="nav-btn ghost" onclick="goTo('ideas')">Ideas</button>
+    <button class="nav-btn ghost" onclick="goTo('mentors')">Mentors</button>
+    <button class="nav-btn ghost" onclick="goTo('learn')">Learn</button>
+    <div class="user-pill" id="user-pill"><div class="user-av" id="user-av">?</div><span id="user-name-nav">User</span></div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ PAGE 2+: PLATFORM -->
+<div class="main-content hidden" id="platform-content">
+
+  <!-- HOME -->
+  <div id="page-home" class="page hidden">
+    <section class="hero">
+      <div class="hero-badge">✨ India's #1 Skill-to-Startup Platform</div>
+      <h1>Transform Your <em>Skills</em> Into a Successful Business</h1>
+      <p>Discover business opportunities, follow proven roadmaps, and connect with experienced mentors.</p>
+      <div class="hero-btns">
+        <button class="btn btn-pri" onclick="startOnboarding()">🎯 Start Free Assessment</button>
+        <button class="btn btn-out" onclick="goTo('ideas')">🔍 Explore Ideas</button>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">12,400+</div><div class="stat-lbl">Entrepreneurs</div></div>
+        <div><div class="stat-num">85+</div><div class="stat-lbl">Business Ideas</div></div>
+        <div><div class="stat-num">200+</div><div class="stat-lbl">Expert Mentors</div></div>
+        <div><div class="stat-num">94%</div><div class="stat-lbl">Success Rate</div></div>
+      </div>
+    </section>
+    <section class="journey-strip">
+      <div class="eyebrow" style="color:#64748B">Your transformation path</div>
+      <h2 style="font-size:1.4rem;font-weight:800;margin:.4rem 0 .3rem">From Skill to Thriving Business</h2>
+      <p style="color:#94A3B8;font-size:.82rem">A structured, proven pathway</p>
+      <div class="j-steps">
+        <div class="jstep"><div class="jstep-num" style="background:#3B82F6;color:#fff">1</div><div class="jstep-lbl">Skill Check</div></div>
+        <div class="jstep"><div class="jstep-num" style="background:#10B981;color:#fff">2</div><div class="jstep-lbl">Business Match</div></div>
+        <div class="jstep"><div class="jstep-num" style="background:#F59E0B;color:#fff">3</div><div class="jstep-lbl">Roadmap</div></div>
+        <div class="jstep"><div class="jstep-num" style="background:#8B5CF6;color:#fff">4</div><div class="jstep-lbl">Learning</div></div>
+        <div class="jstep"><div class="jstep-num" style="background:#EC4899;color:#fff">5</div><div class="jstep-lbl">Mentorship</div></div>
+        <div class="jstep"><div class="jstep-num" style="background:#EF4444;color:#fff">6</div><div class="jstep-lbl">🚀 Launch</div></div>
+      </div>
+    </section>
+    <section class="section"><div class="section-inner">
+      <div class="eyebrow">Everything you need</div>
+      <div class="sec-title">Built for Aspiring Entrepreneurs</div>
+      <div class="grid-3" id="features-grid"></div>
+    </div></section>
+    <section class="section" style="background:#F1F5F9"><div class="section-inner">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem">
+        <div><div class="eyebrow">Popular ideas</div><div class="sec-title" style="margin-bottom:0">Top Business Ideas</div></div>
+        <button class="btn btn-out" onclick="goTo('ideas')" style="font-size:.78rem;padding:.4rem .85rem">View All →</button>
+      </div>
+      <div class="ideas-grid" id="home-ideas-grid"></div>
+    </div></section>
+    <section class="section"><div class="section-inner">
+      <div class="eyebrow">Success stories</div>
+      <div class="sec-title" style="margin-bottom:1.25rem">Real People, Real Results</div>
+      <div class="grid-3" id="testi-grid"></div>
+    </div></section>
+    <section style="background:linear-gradient(135deg,#1E40AF,#0D9488);padding:2.75rem 1.5rem;text-align:center;color:#fff">
+      <h2 style="font-size:1.5rem;font-weight:800;margin-bottom:.55rem">Ready to Start Your Business Journey?</h2>
+      <p style="color:rgba(255,255,255,.8);max-width:440px;margin:0 auto 1.5rem;font-size:.86rem">Join 12,400+ entrepreneurs who transformed their skills into successful businesses.</p>
+      <button class="btn" style="background:#F59E0B;color:#78350F;font-weight:700;font-size:.9rem;padding:.72rem 1.75rem" onclick="startOnboarding()">🚀 Begin Free Assessment</button>
+    </section>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div id="page-onboard" class="page hidden"><div class="onboard" id="onboard-wrap"></div></div>
+
+  <!-- DASHBOARD -->
+  <div id="page-dashboard" class="page hidden">
+    <div style="padding:1.4rem;max-width:1060px;margin:0 auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.35rem;flex-wrap:wrap;gap:.65rem">
+        <div><div style="font-size:1.3rem;font-weight:800" id="dash-greeting">Welcome back! 👋</div><div style="font-size:.8rem;color:var(--muted)">Your business journey is 40% complete</div></div>
+        <button class="btn btn-pri" style="font-size:.78rem;padding:.5rem .95rem" onclick="goTo('ideas')">+ Explore Ideas</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:.85rem;margin-bottom:1.35rem" id="dash-stats"></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:1rem" id="dash-main-grid"></div>
+    </div>
+  </div>
+
+  <!-- IDEAS -->
+  <div id="page-ideas" class="page hidden">
+    <div style="padding:1.4rem;max-width:1060px;margin:0 auto">
+      <div style="margin-bottom:1.1rem"><div class="eyebrow">Explore</div><div style="font-size:1.3rem;font-weight:800;margin-bottom:.25rem">Business Ideas For You</div><p style="font-size:.8rem;color:var(--muted)">85+ ideas — filter by category or difficulty.</p></div>
+      <input class="input" style="max-width:320px;margin-bottom:.85rem" placeholder="🔍 Search ideas..." oninput="filterIdeas(this.value)">
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem" id="idea-filter-btns"></div>
+      <div class="ideas-grid" id="ideas-grid"></div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="page-roadmap" class="page hidden"><div style="padding:1.4rem;max-width:740px;margin:0 auto" id="roadmap-content"></div></div>
+
+  <!-- MENTORS -->
+  <div id="page-mentors" class="page hidden">
+    <div style="padding:1.4rem;max-width:1060px;margin:0 auto">
+      <div style="margin-bottom:1.1rem"><div class="eyebrow">Connect</div><div style="font-size:1.3rem;font-weight:800;margin-bottom:.25rem">Find Your Mentor</div><p style="font-size:.8rem;color:var(--muted)">200+ verified mentors ready to guide you.</p></div>
+      <div class="mentor-grid" id="mentors-grid"></div>
+    </div>
+  </div>
+
+  <!-- LEARN -->
+  <div id="page-learn" class="page hidden">
+    <div style="padding:1.4rem;max-width:1060px;margin:0 auto">
+      <div style="margin-bottom:1.1rem"><div class="eyebrow">Learning Center</div><div style="font-size:1.3rem;font-weight:800;margin-bottom:.25rem">Grow Your Knowledge</div><p style="font-size:.8rem;color:var(--muted)">Videos, articles, guides across 7 categories.</p></div>
+      <div class="learn-grid" id="learn-grid"></div>
+    </div>
+  </div>
+
+</div><!-- /platform-content -->
+
+<!-- TAB BAR -->
+<div class="tab-bar hidden" id="tab-bar">
+  <button class="tab-btn" id="tab-home" onclick="goTo('home')"><span class="tab-icon">🏠</span>Home</button>
+  <button class="tab-btn" id="tab-ideas" onclick="goTo('ideas')"><span class="tab-icon">💡</span>Ideas</button>
+  <button class="tab-btn" id="tab-dashboard" onclick="goTo('dashboard')"><span class="tab-icon">📊</span>Dashboard</button>
+  <button class="tab-btn" id="tab-mentors" onclick="goTo('mentors')"><span class="tab-icon">👥</span>Mentors</button>
+  <button class="tab-btn" id="tab-learn" onclick="goTo('learn')"><span class="tab-icon">🎓</span>Learn</button>
+</div>
+
+<div class="overlay hidden" id="idea-modal" onclick="closeModal(event)"><div class="modal" id="modal-content"></div></div>
+
+</div><!-- /app -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────────
+var IDEAS=[
+  {id:1,icon:'🍰',name:'Home Bakery',cat:'Food',diff:'easy',invest:'₹15K–25K',rev:'₹30K–80K/mo',skills:['Baking','Decoration','Packaging'],desc:'Start a home bakery selling cakes, cookies, and artisan breads. High demand for custom festival orders.',time:'4–6 weeks',match:92},
+  {id:2,icon:'✂️',name:'Tailoring Studio',cat:'Fashion',diff:'easy',invest:'₹20K–40K',rev:'₹25K–60K/mo',skills:['Tailoring','Embroidery'],desc:'Set up a boutique tailoring service for custom stitching, alterations, and ethnic wear.',time:'3–5 weeks',match:88},
+  {id:3,icon:'🎨',name:'Freelance Design Studio',cat:'Technology',diff:'medium',invest:'₹5K–15K',rev:'₹40K–1L/mo',skills:['Graphic Design','Digital Marketing'],desc:'Offer logo design, brand identity, and social media graphics to local businesses.',time:'2–3 weeks',match:85},
+  {id:4,icon:'📱',name:'Mobile Repair Shop',cat:'Technology',diff:'medium',invest:'₹30K–60K',rev:'₹35K–75K/mo',skills:['Mobile Repair'],desc:'Repair smartphones and tablets. High foot traffic near colleges or busy markets.',time:'4–6 weeks',match:79},
+  {id:5,icon:'🎓',name:'Online Coaching',cat:'Education',diff:'easy',invest:'₹5K–10K',rev:'₹20K–60K/mo',skills:['Teaching','Content Creation'],desc:'Teach your skills online via live sessions or pre-recorded courses.',time:'2–4 weeks',match:82},
+  {id:6,icon:'📸',name:'Photography Studio',cat:'Services',diff:'medium',invest:'₹40K–80K',rev:'₹30K–90K/mo',skills:['Photography'],desc:'Offer portrait, product, and event photography. Build a portfolio and grow digitally.',time:'6–8 weeks',match:76},
+  {id:7,icon:'🌾',name:'Organic Farm Products',cat:'Agriculture',diff:'medium',invest:'₹20K–50K',rev:'₹25K–70K/mo',skills:['Agriculture'],desc:'Grow and sell organic produce directly to consumers or local shops.',time:'8–12 weeks',match:73},
+  {id:8,icon:'💄',name:'Beauty & Wellness Studio',cat:'Services',diff:'easy',invest:'₹25K–50K',rev:'₹30K–70K/mo',skills:['Beauty Services'],desc:'Offer home-visit or in-studio beauty services including makeup, skincare, and hair.',time:'3–5 weeks',match:80},
+  {id:9,icon:'📲',name:'Digital Marketing Agency',cat:'Digital',diff:'hard',invest:'₹10K–20K',rev:'₹60K–2L/mo',skills:['Digital Marketing','Content Creation'],desc:'Help local businesses grow online through social media, paid ads, and SEO.',time:'4–6 weeks',match:78},
+  {id:10,icon:'🛍️',name:'Handmade Crafts Shop',cat:'Fashion',diff:'easy',invest:'₹8K–15K',rev:'₹15K–40K/mo',skills:['Handicrafts','Embroidery'],desc:'Create and sell handmade crafts on Instagram, WhatsApp, and local craft fairs.',time:'2–4 weeks',match:84}
+];
+var SKILLS=[{e:'🍳',n:'Cooking'},{e:'🥐',n:'Baking'},{e:'✂️',n:'Tailoring'},{e:'🪡',n:'Embroidery'},{e:'📸',n:'Photography'},{e:'🎨',n:'Graphic Design'},{e:'💻',n:'Web Development'},{e:'📲',n:'Digital Marketing'},{e:'🎭',n:'Handicrafts'},{e:'🌾',n:'Agriculture'},{e:'📱',n:'Mobile Repair'},{e:'🔌',n:'Electrical Repair'},{e:'💄',n:'Beauty Services'},{e:'💪',n:'Fitness Training'},{e:'📝',n:'Content Creation'},{e:'📚',n:'Teaching'}];
+var INTERESTS=[{e:'👗',n:'Fashion'},{e:'🍽️',n:'Food'},{e:'💻',n:'Technology'},{e:'🌾',n:'Agriculture'},{e:'📚',n:'Education'},{e:'❤️',n:'Health'},{e:'💄',n:'Beauty'},{e:'🛍️',n:'Retail'},{e:'🎨',n:'Arts'},{e:'🔧',n:'Services'},{e:'🏠',n:'Home Business'},{e:'🌐',n:'Online Business'}];
+var QUIZ_DATA=[
+  {q:'How would you rate your knowledge of running a business?',opts:['Complete beginner','Know the basics','Some experience','Very experienced']},
+  {q:'How comfortable are you with financial planning?',opts:['Not comfortable','A little comfortable','Fairly comfortable','Very comfortable']},
+  {q:'Do you have existing customers or market research?',opts:['No, starting fresh','I have an idea','Know my target market','Have existing customers']},
+  {q:'How much time can you dedicate per week?',opts:['Less than 5 hours','5–15 hours','15–30 hours','Full time (30+ hours)']}
+];
+var FEATURES=[
+  {icon:'🧠',bg:'#EFF6FF',title:'Smart Skill Assessment',desc:'Identify your strengths across 16+ categories.'},
+  {icon:'💡',bg:'#F0FDF4',title:'Business Recommendation',desc:'Get ideas matched to your skills and interests.'},
+  {icon:'🗺️',bg:'#FFFBEB',title:'Step-by-Step Roadmaps',desc:'Follow 10-step roadmaps from idea to launch.'},
+  {icon:'🎓',bg:'#FDF4FF',title:'Learning Center',desc:'Videos, articles, PDF guides and checklists.'},
+  {icon:'👥',bg:'#FFF1F2',title:'Expert Mentorship',desc:'Connect with 200+ verified mentors for 1-on-1 guidance.'},
+  {icon:'📊',bg:'#ECFDF5',title:'Progress Tracking',desc:'Track progress and earn achievement badges.'}
+];
+var TESTIMONIALS=[
+  {quote:'"EntreSkill Hub helped me turn my baking hobby into a ₹50,000/month business in just 4 months!"',name:'Priya Sharma',role:'Home Bakery Owner, Chennai',color:'#EC4899',init:'PS'},
+  {quote:'"As a rural entrepreneur with tailoring skills, I never knew I could run a business. The mentors here changed my life."',name:'Ramesh Kumar',role:'Tailoring Studio Owner, Coimbatore',color:'#10B981',init:'RK'},
+  {quote:'"I launched my digital marketing agency after completing the full roadmap. Step-by-step guidance made it achievable."',name:'Anita Reddy',role:'Digital Agency Founder, Bengaluru',color:'#8B5CF6',init:'AR'}
+];
+var MENTORS=[
+  {name:'Kavitha Nair',init:'KN',color:'#8B5CF6',exp:'Business Consultant · 12 yrs',tags:['Startups','Finance'],rating:4.9},
+  {name:'Rajesh Iyer',init:'RI',color:'#2563EB',exp:'Tech Entrepreneur · 8 yrs',tags:['Technology','Marketing'],rating:4.8},
+  {name:'Sunita Patel',init:'SP',color:'#EC4899',exp:'Food Business Expert · 15 yrs',tags:['F&B','Branding'],rating:4.9},
+  {name:'Arjun Mehta',init:'AM',color:'#10B981',exp:'Digital Marketing Specialist',tags:['Social Media','SEO'],rating:4.7},
+  {name:'Deepa Krishnan',init:'DK',color:'#F59E0B',exp:'Rural Entrepreneur · 10 yrs',tags:['Agriculture','Crafts'],rating:4.8},
+  {name:'Vijay Sharma',init:'VS',color:'#EF4444',exp:'Fashion & Retail Expert',tags:['Fashion','Retail'],rating:4.6}
+];
+var RESOURCES=[
+  {e:'📈',bg:'#EFF6FF',type:'Video',title:'Marketing on Zero Budget',dur:'18 min',cat:'Marketing'},
+  {e:'💰',bg:'#F0FDF4',type:'Guide',title:'Business Finance for Beginners',dur:'10 min read',cat:'Finance'},
+  {e:'🎨',bg:'#FDF4FF',type:'Video',title:'Build a Brand Identity',dur:'24 min',cat:'Branding'},
+  {e:'🧾',bg:'#FFFBEB',type:'Checklist',title:'Pre-Launch Business Checklist',dur:'5 min',cat:'Planning'},
+  {e:'👥',bg:'#FFF1F2',type:'Article',title:'Find Your First 10 Customers',dur:'8 min read',cat:'Sales'},
+  {e:'📦',bg:'#F0FDF4',type:'Guide',title:'Operations for Home Businesses',dur:'12 min read',cat:'Operations'},
+  {e:'💬',bg:'#EFF6FF',type:'Video',title:'Customer Service That Retains',dur:'15 min',cat:'Customer Service'},
+  {e:'📋',bg:'#FFFBEB',type:'PDF',title:'Business Plan Template',dur:'Template',cat:'Planning'}
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────────
+var S={step:0,skills:[],interests:[],quiz:[],onboarded:false,userName:'',userRole:''};
+var currentPlatformPage='home';
+
+// ── LOGIN LOGIC ───────────────────────────────────────────────────────────────
+function showError(msg){var e=document.getElementById('login-error');e.textContent=msg;e.classList.remove('hidden');setTimeout(function(){e.classList.add('hidden');},3500);}
+function showSignup(){document.getElementById('signin-form').classList.add('hidden');document.getElementById('signup-form').classList.remove('hidden');}
+function showSignin(){document.getElementById('signup-form').classList.add('hidden');document.getElementById('signin-form').classList.remove('hidden');}
+
+function handleSignIn(){
+  var email=document.getElementById('si-email').value.trim();
+  var pass=document.getElementById('si-pass').value;
+  if(!email){showError('Please enter your email address.');return;}
+  if(!pass||pass.length<4){showError('Please enter your password.');return;}
+  var name=email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+  S.userName=name; S.userRole='Entrepreneur';
+  proceedToApp();
+}
+
+function handleSignUp(){
+  var name=document.getElementById('su-name').value.trim();
+  var email=document.getElementById('su-email').value.trim();
+  var pass=document.getElementById('su-pass').value;
+  var role=document.getElementById('su-role').value;
+  if(!name){showError('Please enter your full name.');return;}
+  if(!email||!email.includes('@')){showError('Please enter a valid email.');return;}
+  if(!pass||pass.length<6){showError('Password must be at least 6 characters.');return;}
+  S.userName=name; S.userRole=role||'Entrepreneur';
+  proceedToApp();
+}
+
+function proceedToApp(){
+  var btn=document.getElementById('signin-btn')||document.getElementById('signup-btn');
+  // Show AI welcome
+  document.getElementById('ai-welcome').classList.remove('hidden');
+  document.getElementById('signin-form').classList.add('hidden');
+  document.getElementById('signup-form').classList.add('hidden');
+  fetchAIWelcome(S.userName, S.userRole);
+}
+
+async function fetchAIWelcome(name, role){
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:1000,
+        messages:[{role:'user',content:'Write a warm, motivating 2-sentence welcome message for '+(name||'an aspiring entrepreneur')+' who just joined EntreSkill Hub as a '+(role||'entrepreneur')+'. Be personal, encouraging, and mention skill-to-business transformation. Keep it under 40 words, no quotes needed.'}]
+      })
+    });
+    var data=await res.json();
+    var text=data.content&&data.content[0]&&data.content[0].text?data.content[0].text:'Welcome to EntreSkill Hub! Your journey from skill to successful business starts right here.';
+    document.getElementById('ai-welcome-text').textContent=text;
+    setTimeout(enterPlatform,2200);
+  }catch(err){
+    document.getElementById('ai-welcome-text').textContent='Welcome to EntreSkill Hub, '+name+'! Your journey from skill to successful business starts right now.';
+    setTimeout(enterPlatform,1800);
+  }
+}
+
+function enterPlatform(){
+  document.getElementById('page-login').classList.add('hidden');
+  document.getElementById('main-nav').classList.remove('hidden');
+  document.getElementById('platform-content').classList.remove('hidden');
+  document.getElementById('tab-bar').classList.remove('hidden');
+  // Update nav user pill
+  document.getElementById('user-name-nav').textContent=S.userName||'User';
+  document.getElementById('user-av').textContent=(S.userName||'U').charAt(0).toUpperCase();
+  document.getElementById('dash-greeting').textContent='Welcome, '+(S.userName||'Entrepreneur')+' 👋';
+  populateAll();
+  goTo('home');
+}
+
+// ── PLATFORM NAV ──────────────────────────────────────────────────────────────
+function goTo(page){
+  document.querySelectorAll('#platform-content .page').forEach(function(p){p.classList.add('hidden');});
+  var el=document.getElementById('page-'+page);
+  if(el)el.classList.remove('hidden');
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  var t=document.getElementById('tab-'+page);
+  if(t)t.classList.add('active');
+  currentPlatformPage=page;
+  window.scrollTo(0,0);
+}
+
+// ── RENDER HELPERS ────────────────────────────────────────────────────────────
+function ideaCardHTML(id){
+  return '<div class="idea-card" onclick="openIdeaModal('+id.id+')">'
+    +'<div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem">'
+    +'<div style="font-size:1.55rem">'+id.icon+'</div>'
+    +'<div style="flex:1"><div style="font-weight:700;font-size:.9rem">'+id.name+'</div>'
+    +'<div style="font-size:.7rem;color:var(--muted)">'+id.invest+'</div></div>'
+    +'<div class="diff-'+id.diff+'">'+id.diff+'</div></div>'
+    +'<div style="font-size:.76rem;color:var(--muted);line-height:1.55;margin-bottom:.6rem">'+id.desc+'</div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:.7rem">'
+    +'<span style="color:var(--sec);font-weight:700">'+id.rev+'</span>'
+    +'<span style="color:var(--muted)">⏱ '+id.time+'</span></div></div>';
+}
+function mentorCardHTML(m){
+  return '<div class="mentor-card"><div class="m-av" style="background:'+m.color+'">'+m.init+'</div>'
+    +'<div style="font-weight:700;font-size:.85rem">'+m.name+'</div>'
+    +'<div style="font-size:.7rem;color:var(--muted);margin:.15rem 0">'+m.exp+'</div>'
+    +'<div style="color:#F59E0B;font-size:.78rem">★★★★★ <span style="color:var(--muted);font-size:.68rem">'+m.rating+'</span></div>'
+    +'<div style="display:flex;gap:.28rem;flex-wrap:wrap;justify-content:center;margin:.4rem 0">'
+    +m.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('')+'</div>'
+    +'<button class="btn btn-pri" style="font-size:.7rem;padding:.38rem .7rem;width:100%;justify-content:center;margin-top:.3rem" onclick="alert(\'Session request sent to '+m.name+'!\')">Request Session</button></div>';
+}
+function learnCardHTML(r){
+  return '<div class="learn-card"><div class="learn-thumb" style="background:'+r.bg+'">'+r.e+'</div>'
+    +'<div class="learn-body"><div class="learn-type">'+r.type+'</div>'
+    +'<div class="learn-title">'+r.title+'</div>'
+    +'<div class="learn-meta">'+r.cat+' · '+r.dur+'</div></div></div>';
+}
+
+// ── POPULATE ALL SECTIONS ─────────────────────────────────────────────────────
+function populateAll(){
+  // Features
+  var fg=document.getElementById('features-grid');
+  if(fg)fg.innerHTML=FEATURES.map(function(f){
+    return '<div class="feat-card"><div class="feat-icon" style="background:'+f.bg+'">'+f.icon+'</div><div class="feat-title">'+f.title+'</div><div class="feat-desc">'+f.desc+'</div></div>';
+  }).join('');
+  // Home ideas
+  var hig=document.getElementById('home-ideas-grid');
+  if(hig)hig.innerHTML=IDEAS.slice(0,6).map(ideaCardHTML).join('');
+  // Testimonials
+  var tg=document.getElementById('testi-grid');
+  if(tg)tg.innerHTML=TESTIMONIALS.map(function(t){
+    return '<div class="testi-card"><div class="testi-quote">'+t.quote+'</div>'
+      +'<div style="display:flex;align-items:center;gap:.5rem">'
+      +'<div style="width:32px;height:32px;border-radius:50%;background:'+t.color+';display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.74rem;color:#fff;flex-shrink:0">'+t.init+'</div>'
+      +'<div><div style="font-weight:700;font-size:.78rem">'+t.name+'</div><div style="font-size:.68rem;color:var(--muted)">'+t.role+'</div></div></div></div>';
+  }).join('');
+  // Ideas page
+  var ig=document.getElementById('ideas-grid');
+  if(ig)ig.innerHTML=IDEAS.map(ideaCardHTML).join('');
+  var ifb=document.getElementById('idea-filter-btns');
+  if(ifb){var cats=['All','Food','Technology','Fashion','Services','Digital','Agriculture','Education'];ifb.innerHTML=cats.map(function(c,i){return '<button class="filter-btn'+(i===0?' active':'')+'" onclick="setIdeaFilter(this,\''+c+'\')">'+c+'</button>';}).join('');}
+  // Mentors
+  var mg=document.getElementById('mentors-grid');
+  if(mg)mg.innerHTML=MENTORS.map(mentorCardHTML).join('');
+  // Learn
+  var lg=document.getElementById('learn-grid');
+  if(lg)lg.innerHTML=RESOURCES.map(learnCardHTML).join('');
+  // Dashboard
+  populateDashboard();
+  // Roadmap
+  populateRoadmap();
+}
+
+function populateDashboard(){
+  var ds=document.getElementById('dash-stats');
+  if(ds){var items=[{lbl:'Recommended Ideas',val:'7',d:'Based on your skills'},{lbl:'Roadmaps Started',val:'2',d:'1 active this week'},{lbl:'Learning Progress',val:'38%',d:'↑ 5% this week'},{lbl:'Mentor Sessions',val:'3',d:'Next: Tomorrow 3pm'}];
+    ds.innerHTML=items.map(function(s){return '<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--rad);padding:1rem 1.1rem"><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:.35rem">'+s.lbl+'</div><div style="font-size:1.65rem;font-weight:800">'+s.val+'</div><div style="font-size:.68rem;color:var(--sec);font-weight:600;margin-top:.12rem">'+s.d+'</div></div>';}).join('');}
+  var mg2=document.getElementById('dash-main-grid');
+  if(mg2)mg2.innerHTML=
+    '<div>'
+    +'<div class="card" style="margin-bottom:1rem">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem"><span style="font-weight:700;font-size:.88rem">🗺️ Active Roadmap: Home Bakery</span><a style="font-size:.72rem;color:var(--pri);cursor:pointer" onclick="goTo(\'roadmap\')">View full →</a></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.28rem"><span style="font-weight:600">Overall Progress</span><span style="color:var(--sec);font-weight:700">40%</span></div>'
+    +'<div class="prog-track" style="margin-bottom:.85rem"><div class="prog-fill" style="width:40%;background:var(--sec)"></div></div>'
+    +dashRmSteps()+'</div>'
+    +'<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.85rem"><span style="font-weight:700;font-size:.88rem">🎓 Continue Learning</span><a style="font-size:.72rem;color:var(--pri);cursor:pointer" onclick="goTo(\'learn\')">Browse all →</a></div>'
+    +dashLearning()+'</div></div>'
+    +'<div>'
+    +scoreWidget()
+    +'<div class="card" style="margin-bottom:.9rem"><div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem">🔖 Saved Ideas</div>'
+    +['🍰 Home Bakery','✂️ Tailoring Studio','📱 Mobile Repair'].map(function(n){return '<div style="font-size:.78rem;padding:.38rem .48rem;border-radius:8px;background:#F8FAFC;margin-bottom:.3rem">'+n+'</div>';}).join('')+'</div>'
+    +'<div class="card"><div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem">🏆 Achievements</div><div style="display:flex;gap:.38rem;flex-wrap:wrap">'
+    +['🎯','🗺️','📚'].map(function(b){return '<div style="width:40px;height:40px;border-radius:10px;border:1.5px solid #F59E0B;background:#FFFBEB;display:flex;align-items:center;justify-content:center;font-size:1.1rem">'+b+'</div>';}).join('')
+    +['👥','🚀'].map(function(b){return '<div style="width:40px;height:40px;border-radius:10px;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.1rem">'+b+'</div>';}).join('')
+    +'</div></div></div>';
+}
+
+function dashRmSteps(){
+  var steps=[{done:true,lbl:'Validate Idea',sub:'Done'},{done:true,lbl:'Market Research',sub:'Done'},{done:true,lbl:'Cost Estimation',sub:'Done'},{active:true,lbl:'Acquire Tools',sub:'In progress'},{lbl:'Register Business',sub:'Upcoming'},{lbl:'Create Brand',sub:'Upcoming'}];
+  return steps.map(function(s){
+    var bg=s.done?'var(--sec)':(s.active?'var(--pri)':'#F1F5F9');
+    var col=(s.done||s.active)?'#fff':'#94A3B8';
+    return '<div class="rm-step"><div class="rm-dot" style="background:'+bg+';color:'+col+(s.active?';box-shadow:0 0 0 3px #DBEAFE':'')+'">'+( s.done?'✓':s.active?'4':'•')+'</div><div><div style="font-weight:600;font-size:.8rem">'+s.lbl+'</div><div style="font-size:.7rem;color:var(--muted)">'+s.sub+'</div></div></div>';
+  }).join('');
+}
+function dashLearning(){
+  return [{icon:'▶️',t:'How to Price Your Baked Goods',m:'Video · 12 min',p:100},{icon:'📄',t:'FSSAI Registration Guide',m:'Guide · 5 min',p:60},{icon:'✅',t:'Pre-Launch Checklist',m:'Checklist · 3 min',p:0}].map(function(l){
+    return '<div style="display:flex;gap:.6rem;align-items:center;padding:.42rem;border-radius:8px;background:#F8FAFC;margin-bottom:.35rem;cursor:pointer">'
+      +'<div style="font-size:1.1rem">'+l.icon+'</div>'
+      +'<div style="flex:1;min-width:0"><div style="font-size:.78rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+l.t+'</div>'
+      +'<div style="font-size:.67rem;color:var(--muted)">'+l.m+'</div>'
+      +(l.p>0?'<div class="prog-track" style="margin-top:.18rem"><div class="prog-fill" style="width:'+l.p+'%;background:var(--pri)"></div></div>':'')
+      +'</div>'+(l.p===100?'<span style="font-size:.7rem;color:var(--sec);font-weight:700">✓</span>':'')+'</div>';
+  }).join('');
+}
+function scoreWidget(){
+  return '<div class="card" style="margin-bottom:.9rem;text-align:center">'
+    +'<div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem">📊 Readiness Score</div>'
+    +'<div style="position:relative;display:inline-block;margin-bottom:.65rem">'
+    +'<svg width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="#E2E8F0" stroke-width="8"/><circle cx="50" cy="50" r="42" fill="none" stroke="#2563EB" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="66" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg>'
+    +'<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font-size:1.75rem;font-weight:800">75%</span><span style="font-size:.6rem;color:var(--muted)">Ready</span></div></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.45rem;text-align:left">'
+    +[['Skills','80%','#2563EB'],['Business','65%','#10B981'],['Marketing','72%','#8B5CF6'],['Finance','58%','#F59E0B']].map(function(r){return '<div><div style="font-size:.68rem;color:var(--muted);margin-bottom:.18rem">'+r[0]+'</div><div class="prog-track"><div class="prog-fill" style="width:'+r[1]+';background:'+r[2]+'"></div></div></div>';}).join('')
+    +'</div></div>';
+}
+
+function populateRoadmap(){
+  var el=document.getElementById('roadmap-content');if(!el)return;
+  var steps=[{n:1,done:true,t:'Validate Idea',d:'Research if people want and pay for home-baked goods in your area.'},{n:2,done:true,t:'Market Research',d:'Identify target customers, competitors, and pricing benchmarks.'},{n:3,done:true,t:'Estimate Costs',d:'Calculate investment for equipment, ingredients, and packaging.'},{n:4,active:true,t:'Acquire Tools',d:'Purchase oven, mixer, baking trays, and packaging materials.'},{n:5,t:'Register Business',d:'Register as a sole proprietorship and get FSSAI food license.'},{n:6,t:'Create Brand',d:'Choose a name, design a logo, and set up social media pages.'},{n:7,t:'Build Online Presence',d:'Set up WhatsApp Business, Instagram, and Swiggy Instamart.'},{n:8,t:'Get First Customers',d:'Offer free samples and take initial orders from neighbours.'},{n:9,t:'Track & Optimize',d:'Monitor orders, feedback, and costs. Refine recipes and pricing.'},{n:10,t:'Scale Operations',d:'Hire help, add delivery, and expand to corporate orders.'}];
+  el.innerHTML='<button class="btn btn-out" style="font-size:.74rem;padding:.36rem .72rem;margin-bottom:1rem" onclick="goTo(\'dashboard\')">← Dashboard</button>'
+    +'<div style="font-size:1.85rem;margin-bottom:.5rem">🍰</div>'
+    +'<div style="font-size:1.3rem;font-weight:800;margin-bottom:.18rem">Home Bakery Business</div>'
+    +'<div style="font-size:.78rem;color:var(--muted);margin-bottom:.85rem">₹15,000–25,000 · 4–6 weeks · Beginner</div>'
+    +'<div class="prog-track" style="margin-bottom:.28rem"><div class="prog-fill" style="width:40%;background:var(--sec)"></div></div>'
+    +'<div style="font-size:.7rem;color:var(--sec);font-weight:700;margin-bottom:1.1rem">40% Complete · Step 4 of 10</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.1rem">'
+    +[['🎯 Required Skills','Baking, Decoration'],['🛠️ Tools Needed','Oven, Mixer, Packaging'],['💰 Investment','₹15,000–₹25,000'],['📈 Revenue','₹30K–₹80K/month']].map(function(r){return '<div class="card" style="padding:.85rem"><div style="font-size:.68rem;font-weight:700;color:var(--muted);margin-bottom:.22rem">'+r[0]+'</div><div style="font-size:.8rem;font-weight:600">'+r[1]+'</div></div>';}).join('')+'</div>'
+    +'<div class="card" style="margin-bottom:1rem"><div style="font-weight:700;font-size:.88rem;margin-bottom:.75rem">📋 Your 10-Step Roadmap</div>'
+    +steps.map(function(s){var bg=s.done?'var(--sec)':(s.active?'var(--pri)':'#F1F5F9');var col=(s.done||s.active)?'#fff':'#94A3B8';return '<div style="display:flex;gap:.85rem;padding:.72rem 0;border-bottom:1px solid var(--border);align-items:flex-start"><div style="width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.66rem;font-weight:700;background:'+bg+';color:'+col+(s.active?';box-shadow:0 0 0 3px #DBEAFE':'')+'">'+( s.done?'✓':s.n)+'</div><div><div style="font-weight:700;font-size:.84rem">'+s.t+(s.active?'<span style="font-size:.62rem;background:#DBEAFE;color:#1D4ED8;padding:.1rem .42rem;border-radius:99px;margin-left:.35rem;font-weight:700">Current</span>':'')+'</div><div style="font-size:.74rem;color:var(--muted);margin-top:.15rem">'+s.d+'</div></div></div>';}).join('')+'</div>'
+    +'<div class="card"><div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem">🧠 SWOT Analysis</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem">'
+    +[['Strengths','#F0FDF4','#059669','Baking skills, Low cost'],['Weaknesses','#FFFBEB','#D97706','Limited capacity, Solo'],['Opportunities','#EFF6FF','#2563EB','Festival demand, Online orders'],['Threats','#FEF2F2','#DC2626','Competition, Raw material cost']].map(function(r){return '<div style="background:'+r[1]+';border-radius:9px;padding:.7rem"><div style="font-size:.68rem;font-weight:700;color:'+r[2]+';margin-bottom:.18rem">'+r[0]+'</div><div style="font-size:.74rem">'+r[3]+'</div></div>';}).join('')+'</div></div>';
+}
+
+// ── ONBOARDING ────────────────────────────────────────────────────────────────
+function startOnboarding(){S.step=0;S.skills=[];S.interests=[];S.quiz=[];renderStep();goTo('onboard');}
+function renderStep(){
+  var wrap=document.getElementById('onboard-wrap');
+  var pct=((S.step+1)/5)*100;
+  var labels=['Account','Skills','Interests','Quiz','Results'];
+  var bc=labels.map(function(l,i){return '<div style="font-size:.66rem;padding:.16rem .46rem;border-radius:6px;background:'+(i<=S.step?'#EFF6FF':'#F1F5F9')+';color:'+(i<=S.step?'var(--pri)':'var(--muted)')+';font-weight:'+(i===S.step?'700':'400')+'">'+l+'</div>';}).join('');
+  var body='';
+  if(S.step===0){
+    body='<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--pri);margin-bottom:.38rem">Step 1 of 5</div>'
+      +'<div style="font-size:1.25rem;font-weight:800;margin-bottom:.35rem">Create Your Account</div>'
+      +'<div style="font-size:.83rem;color:var(--muted);margin-bottom:1.25rem">Join thousands of entrepreneurs building successful businesses.</div>'
+      +'<div style="display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem">'
+      +'<input class="input" placeholder="Full Name"><input class="input" placeholder="Email Address" type="email">'
+      +'<input class="input" placeholder="Password" type="password">'
+      +'<select class="input"><option>I am a... Select role</option><option>Student</option><option>Skilled Worker</option><option>Women Entrepreneur</option><option>Rural Entrepreneur</option><option>Freelancer</option></select></div>'
+      +'<button class="btn btn-pri full-w" onclick="nextStep()">Continue → Skill Assessment</button>';
+  }else if(S.step===1){
+    var chips=SKILLS.map(function(sk){return '<div class="skill-chip'+(S.skills.indexOf(sk.n)>-1?' sel':'')+'" onclick="toggleSkill(\''+sk.n+'\')"><span>'+sk.e+'</span>'+sk.n+'</div>';}).join('');
+    body='<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--pri);margin-bottom:.38rem">Step 2 of 5</div>'
+      +'<div style="font-size:1.25rem;font-weight:800;margin-bottom:.35rem">Select Your Skills</div>'
+      +'<div style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Multiple selections encouraged — even hobbies count!</div>'
+      +'<div class="skill-grid">'+chips+'</div>'
+      +'<div style="font-size:.74rem;color:var(--muted);margin-bottom:.85rem">'+S.skills.length+' skill'+(S.skills.length!==1?'s':'')+' selected</div>'
+      +'<button class="btn btn-pri full-w" onclick="nextStep()" '+(S.skills.length===0?'disabled style="opacity:.5"':'')+'>Continue → Interests</button>';
+  }else if(S.step===2){
+    var chips=INTERESTS.map(function(i){return '<div class="int-chip'+(S.interests.indexOf(i.n)>-1?' sel':'')+'" onclick="toggleInterest(\''+i.n+'\')"><div style="font-size:1.4rem">'+i.e+'</div>'+i.n+'</div>';}).join('');
+    body='<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sec);margin-bottom:.38rem">Step 3 of 5</div>'
+      +'<div style="font-size:1.25rem;font-weight:800;margin-bottom:.35rem">Your Interests</div>'
+      +'<div style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Helps us find business ideas you\'ll love building.</div>'
+      +'<div class="int-grid">'+chips+'</div>'
+      +'<div style="font-size:.74rem;color:var(--muted);margin-bottom:.85rem">'+S.interests.length+' selected</div>'
+      +'<button class="btn btn-pri full-w" onclick="nextStep()" '+(S.interests.length===0?'disabled style="opacity:.5"':'')+'>Continue → Quiz</button>';
+  }else if(S.step===3){
+    var qs=QUIZ_DATA.map(function(q,qi){
+      var opts=q.opts.map(function(o,oi){return '<div class="quiz-opt'+(S.quiz[qi]===oi?' sel':'')+'" onclick="setAnswer('+qi+','+oi+')">'+o+'</div>';}).join('');
+      return '<div style="margin-bottom:1.25rem"><div style="font-weight:600;font-size:.88rem;margin-bottom:.55rem">'+(qi+1)+'. '+q.q+'</div>'+opts+'</div>';
+    }).join('');
+    body='<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);margin-bottom:.38rem">Step 4 of 5</div>'
+      +'<div style="font-size:1.25rem;font-weight:800;margin-bottom:.35rem">Readiness Quiz</div>'
+      +'<div style="font-size:.83rem;color:var(--muted);margin-bottom:1rem">Help us personalise your roadmap.</div>'
+      +qs
+      +'<button class="btn btn-pri full-w" onclick="nextStep()" '+(S.quiz.length<4?'disabled style="opacity:.5"':'')+'>Generate My Business Profile →</button>';
+  }else if(S.step===4){
+    var score=Math.min(95,50+S.skills.length*2+S.interests.length*1.5+S.quiz.reduce(function(a,b){return a+b;},0)*2.5);
+    var cards=IDEAS.slice(0,3).map(function(id){
+      return '<div class="reco-card top"><div style="font-size:1.75rem">'+id.icon+'</div><div><div style="font-size:.66rem;font-weight:700;background:#DCFCE7;color:#15803D;padding:.13rem .46rem;border-radius:99px;display:inline-block;margin-bottom:.28rem">'+id.match+'% Match</div><div style="font-weight:700;font-size:.9rem;margin-bottom:.22rem">'+id.name+'</div><div style="font-size:.75rem;color:var(--muted);margin-bottom:.45rem">'+id.desc+'</div><div style="display:flex;gap:.35rem;flex-wrap:wrap"><span class="tag">💰 '+id.invest+'</span><span class="tag">📈 '+id.rev+'</span></div></div></div>';
+    }).join('');
+    body='<div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sec);margin-bottom:.38rem">✅ Complete</div>'
+      +'<div style="font-size:1.25rem;font-weight:800;margin-bottom:.35rem">Your Entrepreneur Profile</div>'
+      +'<div style="background:linear-gradient(135deg,#EFF6FF,#F0FDF4);border-radius:14px;padding:1.25rem;text-align:center;margin-bottom:1.1rem">'
+      +'<div style="font-size:.75rem;color:var(--muted);margin-bottom:.18rem">Readiness Score</div>'
+      +'<div style="font-size:2.5rem;font-weight:800;color:var(--pri)">'+Math.round(score)+'%</div>'
+      +'<div style="font-size:.78rem;color:var(--sec);font-weight:600">Great potential! Ready to launch 🚀</div></div>'
+      +'<div style="font-weight:700;font-size:.88rem;margin-bottom:.65rem">🎯 Top Business Ideas For You</div>'
+      +cards
+      +'<button class="btn btn-sec full-w" onclick="goTo(\'dashboard\')" style="margin-top:.9rem">🎉 Go to My Dashboard</button>';
+  }
+  wrap.innerHTML='<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.65rem">'+bc+'</div>'
+    +'<div class="progress-bar"><div class="prog-bar-fill" style="width:'+pct+'%"></div></div>'+body;
+}
+function nextStep(){if(S.step<4){S.step++;renderStep();window.scrollTo(0,0);}}
+function toggleSkill(n){var i=S.skills.indexOf(n);if(i>-1)S.skills.splice(i,1);else S.skills.push(n);renderStep();}
+function toggleInterest(n){var i=S.interests.indexOf(n);if(i>-1)S.interests.splice(i,1);else S.interests.push(n);renderStep();}
+function setAnswer(qi,oi){S.quiz[qi]=oi;renderStep();}
+
+// ── IDEAS ─────────────────────────────────────────────────────────────────────
+function filterIdeas(q){var g=document.getElementById('ideas-grid');if(g)g.innerHTML=IDEAS.filter(function(i){return i.name.toLowerCase().indexOf(q.toLowerCase())>-1||i.desc.toLowerCase().indexOf(q.toLowerCase())>-1;}).map(ideaCardHTML).join('');}
+function setIdeaFilter(btn,cat){document.querySelectorAll('#idea-filter-btns .filter-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');var g=document.getElementById('ideas-grid');if(g)g.innerHTML=(cat==='All'?IDEAS:IDEAS.filter(function(i){return i.cat===cat;})).map(ideaCardHTML).join('');}
+
+// ── IDEA MODAL ────────────────────────────────────────────────────────────────
+function openIdeaModal(id){
+  var idea=IDEAS.find(function(i){return i.id===id;});if(!idea)return;
+  document.getElementById('modal-content').innerHTML='<div class="modal-handle"></div>'
+    +'<div style="display:flex;gap:.65rem;align-items:flex-start;margin-bottom:1rem"><div style="font-size:2.1rem">'+idea.icon+'</div><div><div style="font-weight:800;font-size:1.1rem">'+idea.name+'</div><div style="font-size:.78rem;color:var(--muted);margin-top:.15rem">'+idea.desc+'</div></div></div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem">'
+    +[['💰 Investment',idea.invest],['📈 Revenue',idea.rev],['⏱ Launch Time',idea.time],['📊 Difficulty',idea.diff]].map(function(r){return '<div style="background:#F8FAFC;border-radius:9px;padding:.62rem"><div style="font-size:.67rem;color:var(--muted);font-weight:600">'+r[0]+'</div><div style="font-size:.82rem;font-weight:700;margin-top:.15rem">'+r[1]+'</div></div>';}).join('')+'</div>'
+    +'<div style="margin-bottom:.9rem"><div style="font-size:.78rem;font-weight:700;margin-bottom:.35rem">Required Skills</div><div style="display:flex;gap:.3rem;flex-wrap:wrap">'+idea.skills.map(function(s){return '<span class="tag">'+s+'</span>';}).join('')+'</div></div>'
+    +'<button class="btn btn-pri full-w" onclick="goTo(\'roadmap\');closeModal()">🗺️ Start Roadmap for This Business</button>';
+  document.getElementById('idea-modal').classList.remove('hidden');
+}
+function closeModal(e){if(!e||e.target.id==='idea-modal')document.getElementById('idea-modal').classList.add('hidden');}
+</script>
